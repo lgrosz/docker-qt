@@ -22,49 +22,6 @@ RUN setx /M PATH $('C:\jom;{0}' -f $env:PATH);
 USER ContainerUser
 
 
-# Build OpenSSL 1.1
-FROM builder as openssl
-
-# Install perl, required to build openssl
-ADD https://github.com/StrawberryPerl/Perl-Dist-Strawberry/releases/download/SP_5380_5361/strawberry-perl-5.38.0.1-64bit.msi C:\
-USER ContainerAdministrator
-RUN Start-Process msiexec.exe -Wait -ArgumentList '/I C:\strawberry-perl-5.38.0.1-64bit.msi /quiet'
-USER ContainerUser
-
-# Install NASM, optional for faster openssl function execution
-ADD https://www.nasm.us/pub/nasm/releasebuilds/2.16.01/win64/nasm-2.16.01-win64.zip C:\
-RUN Expand-Archive C:\nasm-2.16.01-win64.zip -DestinationPath C:\
-
-# Set environment
-USER ContainerAdministrator
-RUN setx /M PATH $('C:\nasm-2.16.01;{0}' -f $env:PATH);
-USER ContainerUser
-
-# Build and install openssl
-ADD https://www.openssl.org/source/openssl-1.1.1w.tar.gz C:\
-RUN tar -xzf C:\openssl-1.1.1w.tar.gz
-
-SHELL ["cmd", "/S", "/C"]
-
-# Build
-RUN CALL "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat" `
-      && CD openssl-1.1.1w `
-      && perl Configure VC-WIN64A `
-      && nmake
-
-# Test
-RUN CALL "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat" `
-      && CD openssl-1.1.1w `
-      && nmake test
-
-# Install
-USER ContainerAdministrator
-RUN CALL "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat" `
-      && CD openssl-1.1.1w `
-      && nmake install
-USER ContainerUser
-
-
 # Build Qt stage
 FROM builder as qt
 
@@ -90,7 +47,7 @@ RUN 7z x -bsp2 C:\qt-everywhere-src-5.15.0.tar
 
 WORKDIR C:\qt-everywhere-src-5.15.0
 
-COPY --from=openssl ["C:/Program Files/OpenSSL", "C:/Program Files/OpenSSL"]
+COPY --from=lgrosz/openssl:1.1.1w ["C:/Program Files/OpenSSL", "C:/Program Files/OpenSSL"]
 
 ADD https://www.python.org/ftp/python/2.7.18/python-2.7.18.amd64.msi C:\
 USER ContainerAdministrator
