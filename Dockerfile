@@ -17,9 +17,7 @@ ADD https://download.qt.io/official_releases/jom/jom_1_1_4.zip C:\
 RUN Expand-Archive .\jom_1_1_4.zip -DestinationPath C:\jom
 
 # Set environment
-USER ContainerAdministrator
 RUN setx /M PATH $('C:\jom;{0}' -f $env:PATH);
-USER ContainerUser
 
 
 # Build Qt stage
@@ -29,10 +27,8 @@ ADD https://download.qt.io/archive/qt/5.15/5.15.0/single/qt-everywhere-src-5.15.
 
 # Install 7z
 ADD https://www.7-zip.org/a/7z2301-x64.msi C:\
-USER ContainerAdministrator
 RUN Start-Process msiexec.exe -Wait -ArgumentList '/I C:\7z2301-x64.msi /quiet'
 RUN setx /M PATH $('C:\Program Files\7-Zip;{0}' -f $env:PATH);
-USER ContainerUser
 
 # Extract with 7z
 RUN 7z x -bsp2 C:\qt-everywhere-src-5.15.0.tar.xz
@@ -43,10 +39,8 @@ WORKDIR C:\qt-everywhere-src-5.15.0
 COPY --from=lgrosz/openssl:1.1.1w ["C:/Program Files/OpenSSL", "C:/Program Files/OpenSSL"]
 
 ADD https://www.python.org/ftp/python/2.7.18/python-2.7.18.amd64.msi C:\
-USER ContainerAdministrator
 RUN Start-Process msiexec.exe -Wait -ArgumentList '/I C:\python-2.7.18.amd64.msi /quiet'
 RUN setx /M PATH $('C:\Python27;{0}' -f $env:PATH);
-USER ContainerUser
 
 # Changing shells since vcvars64 is a batch script
 SHELL ["cmd", "/S", "/C"]
