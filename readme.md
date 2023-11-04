@@ -32,6 +32,4 @@ Pre-built images are uploaded to the `lgrosz` repository on Docker Hub.
 | Name | Tag | `QT_CONFIGURE_EXTRA` |
 | --- | --- | --- |
 | qt5 | 5.15.0 | |
-| qt5 | 5.15.0-mt | `-static-runtime` |
 | qt5 | 5.15.0-static | `-static` |
-| qt5 | 5.15.0-mt-static | `-static-runtime -static` |
