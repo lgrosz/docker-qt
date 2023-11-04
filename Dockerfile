@@ -68,7 +68,7 @@ RUN CALL "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxil
 
 
 # Main image
-FROM mcr.microsoft.com/windows/servercore:ltsc2019
+FROM mcr.microsoft.com/windows/nanoserver:ltsc2019
 
 COPY --from=qt C:\Qt C:\Qt
 
