@@ -61,7 +61,7 @@ RUN CALL "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxil
             -nomake tests `
             -skip qtwebengine `
             -opensource `
-            -prefix C:\Qt\5.15.0
+            -prefix C:\Qt
 
 # Build
 RUN CALL "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat" `
