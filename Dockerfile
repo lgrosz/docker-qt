@@ -25,13 +25,6 @@ USER ContainerUser
 # Build Qt stage
 FROM builder as qt
 
-# Download xz
-#ADD https://tukaani.org/xz/xz-5.2.9-windows.zip C:\xz-5.2.9-windows.zip
-#RUN Expand-Archive C:\xz-5.2.9-windows.zip -DestinationPath C:\xz
-#USER ContainerAdministrator
-#RUN setx /M PATH $('C:\xz\bin_x86-64;{0}' -f $env:PATH);
-#USER ContainerUser
-
 ADD https://download.qt.io/archive/qt/5.15/5.15.0/single/qt-everywhere-src-5.15.0.tar.xz C:\qt-everywhere-src-5.15.0.tar.xz
 
 # Install 7z
