@@ -25,6 +25,8 @@ USER ContainerUser
 # Build Qt stage
 FROM builder as qt
 
+ARG QT_CONFIGURE_EXTRA
+
 ADD https://download.qt.io/archive/qt/5.15/5.15.0/single/qt-everywhere-src-5.15.0.tar.xz C:\qt-everywhere-src-5.15.0.tar.xz
 
 # Install 7z
@@ -61,7 +63,8 @@ RUN CALL "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxil
             -nomake tests `
             -skip qtwebengine `
             -opensource `
-            -prefix C:\Qt
+            -prefix C:\Qt `
+            %QT_CONFIGURE_EXTRA%
 
 # Build
 RUN CALL "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat" `
